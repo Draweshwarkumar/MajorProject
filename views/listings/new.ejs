@@ -6,18 +6,25 @@
     <title>wanderlust</title>
 </head>
 <body>
-    <form action="POST" action="/listing">
-        <input name="title" placeholder="enter title" type="text">
+    <h3>Create a New Listing</h3>
+    <form method="POST" action="/listing">
+        <input name="listing[title]" placeholder="enter title" type="text">
         <br>
-        <textarea  name="description" placeholder="enter description" type="text"></textarea>
         <br>
-        <input name="image" placeholder="enter image URL/Link" type="text">
+        <textarea name="listing[description]" placeholder="enter description" type="text"></textarea>
         <br>
-        <input name="price" placeholder="enter price" type="number">
         <br>
-        <input name="country" placeholder="enter country" type="text">
+        <input name="listing[image]" placeholder="enter image URL/Link" type="text">
         <br>
-        <input name="location" placeholder="enter location" type="text">
+        <br>
+        <input name="listing[price]" placeholder="enter price" type="number">
+        <br>
+        <br>
+        <input name="listing[country]" placeholder="enter country" type="text">
+        <br>
+        <br>
+        <input name="listing[location]" placeholder="enter location" type="text">
+        <br>
         <br>
         <button>Add</button>
     </form>
