@@ -29,6 +29,8 @@ app.use(express.static(path.join(__dirname,"/public")))
 
 app.get("/listing",async (req,res) =>{
  const alllisting = await Listing.find({});
+ //console.log(alllisting);
+ 
     res.render("listings/index.ejs",{alllisting});
 });
 
@@ -96,6 +98,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
-app.get("/testing" , (req,res) =>{
-    res.send("working");
-})

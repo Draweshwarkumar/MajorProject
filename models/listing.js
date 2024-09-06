@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose'); // Import mongoose
+const Schema = mongoose.Schema; // Get the Schema class from mongoose
 
 const listingSchema = new Schema({
     title: {
@@ -7,13 +7,12 @@ const listingSchema = new Schema({
         required: true,
     },
     description: String,
-    Image: {
+    image: {
         type: String,
-        default:
-            "https://unsplash.com/photos/red-and-brown-leafy-tree-at-daytime-Bn2rzIYM53g",
-        set: (v) => 
+        default: "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?cs=srgb&dl=pexels-anjana-c-169994-674010.jpg&fm=jpg",
+        set: (v) =>
             v === ""
-            ? "https://unsplash.com/photos/red-and-brown-leafy-tree-at-daytime-Bn2rzIYM53g"
+            ? "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?cs=srgb&dl=pexels-anjana-c-169994-674010.jpg&fm=jpg"
             : v,
     },
     price: Number,
@@ -21,5 +20,6 @@ const listingSchema = new Schema({
     country: String
 });
 
-const Listing = mongoose.model("Listing", listingSchema);
-module.exports = Listing; // Corrected export statement
+const Listing = mongoose.model('Listing', listingSchema);
+
+module.exports = Listing;
