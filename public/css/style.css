@@ -68,4 +68,15 @@ body{
    border: none !important;
  }
 
+ .listing-link{
+   text-decoration: none;
+ }
 
+ /* Show page */
+ .show-img {
+   height: 30vh;
+ }
+
+ .btns {
+   display: flex;
+ }
