@@ -48,10 +48,15 @@ app.get("/listings/:id",async(req,res) =>{
 });
 
 //Create Route
-app.post("/listing", async (req,res) =>{
-  const newListing =  new Listing(req.body.listing);
+app.post("/listing", async (req,res,next) =>{
+  try{
+    const newListing =  new Listing(req.body.listing);
   await newListing.save();
     res.redirect("/listing")
+  }
+  catch (err) {
+    next(err);
+  }
 });
 
 //Edit Route
@@ -90,6 +95,10 @@ app.delete("/listings/:id", async (req,res) =>{
 //     console.log("sample was saved");
 //     res.send("successful testing");
 // });
+
+app.use((err,req,res,next) =>{
+    res.send("something went wrong");
+});
 
 app.get("/", (req, res) => {
     res.send("Hello, my name is Shivam!");
