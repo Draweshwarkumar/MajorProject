@@ -6,6 +6,8 @@ const port = 8080;
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const ExpressError = require("./utils/ExpressError.js");
+const {listingSchema} = require("./schema.js");
 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -47,8 +49,19 @@ app.get("/listings/:id",async(req,res) =>{
 
 });
 
+const validateListing = (req,res,next) =>{
+    let {error} = listingSchema.validate(req.body);
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(",");
+     throw new ExpressError(400, errMsg);
+    }
+    else{
+        next();
+    }
+}
+
 //Create Route
-app.post("/listing", async (req,res,next) =>{
+app.post("/listing",validateListing, async (req,res,next) =>{
   try{
     const newListing =  new Listing(req.body.listing);
   await newListing.save();
@@ -67,7 +80,7 @@ app.get("/listings/:id/edit",async (req,res) =>{
 });
 
 //update Route
-app.put("/listings/:id", async(req,res) =>{
+app.put("/listings/:id",validateListing, async(req,res) =>{
     let {id} = req.params;
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
    res.redirect("/listing");
@@ -96,12 +109,14 @@ app.delete("/listings/:id", async (req,res) =>{
 //     res.send("successful testing");
 // });
 
-app.use((err,req,res,next) =>{
-    res.send("something went wrong");
-});
+app.all("*",(req,res,next) =>{
+    next(new ExpressError(404, "Page Not Found !"));
+})
 
-app.get("/", (req, res) => {
-    res.send("Hello, my name is Shivam!");
+app.use((err,req,res,next) =>{
+    let{statusCode = 500,message = "Something went wrong !"} = err;
+   res.render("error.ejs",{message});
+    // res.status(statusCode).send(message);
 });
 
 app.listen(port, () => {
