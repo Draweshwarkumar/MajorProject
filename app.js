@@ -7,7 +7,7 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
-const {listingSchema} = require("./schema.js");
+const {listingSchema, reviewSchema} = require("./schema.js");
 const Review = require("./models/review.js");
 
 
@@ -45,7 +45,7 @@ app.get("/listings/new",(req,res) =>{
 // Show Route
 app.get("/listings/:id",async(req,res) =>{
     let {id} = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs",{listing});
 
 });
@@ -60,6 +60,19 @@ const validateListing = (req,res,next) =>{
         next();
     }
 }
+
+
+const validateReview = (req,res,next) =>{
+    let {error} = reviewSchema.validate(req.body);
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(",");
+     throw new ExpressError(400, errMsg);
+    }
+    else{
+        next();
+    }
+}
+
 
 //Create Route
 app.post("/listing",validateListing, async (req,res,next) =>{
@@ -97,9 +110,9 @@ app.delete("/listings/:id", async (req,res) =>{
 
 //Reviews
 //Post Route
-app.post("/listings/:id/reviews", async (req,res) =>{
+app.post("/listings/:id/reviews",validateReview,(async (req,res) =>{
     let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.Review);
+    let newReview = new Review(req.body.review);
 
     listing.reviews.push(newReview);
 
@@ -111,7 +124,7 @@ app.post("/listings/:id/reviews", async (req,res) =>{
     // console.log("new review saved");
     // res.send("new review saved");
 
-})
+}));
 
 
 
