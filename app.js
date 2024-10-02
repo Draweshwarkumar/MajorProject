@@ -9,6 +9,7 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const {listingSchema, reviewSchema} = require("./schema.js");
 const Review = require("./models/review.js");
+const { listenerCount } = require("process");
 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -121,10 +122,17 @@ app.post("/listings/:id/reviews",validateReview,(async (req,res) =>{
 
     res.redirect(`/listings/${listing._id}`);
 
-    // console.log("new review saved");
-    // res.send("new review saved");
+    console.log("new review saved");
+    res.send("new review saved");
 
 }));
+
+//Delete Review Route
+app.delete("/listings/:id/reviews/:reviewId", async(req,res) =>{
+    let {id, reviewId} = req.params;
+
+    await Listing.findByIdAndUpdate(Id, {pull:{reviews: reviewId}});
+})
 
 
 
