@@ -122,8 +122,8 @@ app.post("/listings/:id/reviews",validateReview,(async (req,res) =>{
 
     res.redirect(`/listings/${listing._id}`);
 
-    console.log("new review saved");
-    res.send("new review saved");
+    // console.log("new review saved");
+    // res.send("new review saved");
 
 }));
 
