@@ -9,6 +9,7 @@ const { reviewSchema } = require("./schema.js");
 const Listing = require('./models/listing.js'); // Use relative path
 const Review = require("./models/review.js");
 const listings = require("./routes/listing.js"); // Import listings routes
+const reviwes = require("./routes/review.js");
 
 const port = 8080;
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -32,38 +33,15 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
-// Validation Middleware for Reviews
-const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
-    }
-};
+
 
 // Use the listings routes
 app.use("/listings", listings);
+app.use("/listings/:id/reviews",reviwes);
 
-// Reviews Routes
-app.post("/listings/:id/reviews", validateReview, async (req, res) => {
-    let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review);
-
-    listing.reviews.push(newReview);
-    await newReview.save();
-    await listing.save();
-
-    res.redirect(`/listings/${listing._id}`);
-});
-
-// Delete Review Route
-app.delete("/listings/:id/reviews/:reviewId", async (req, res) => {
-    let { id, reviewId } = req.params;
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/listings/${id}`);
+// Redirect root route to listings
+app.get("/", (req, res) => {
+    res.redirect("/listings");
 });
 
 // Catch-all Route
