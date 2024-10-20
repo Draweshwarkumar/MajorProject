@@ -11,10 +11,6 @@ app.get("/getsignedcookie",(req,res) =>{
     res.send("signed cookie sent");
 });
 
-app.get("/demo" , (req,res) =>{
-    res.send("it is for github streak only")
-})
-
 app.get("/verify",(req,res) =>{
     console.log(req.signedCookies);
     res.send("verified");
