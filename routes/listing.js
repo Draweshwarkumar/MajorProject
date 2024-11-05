@@ -35,6 +35,7 @@ router.get("/:id", async (req, res) => {
 
 // Create Route - Add a new listing
 router.post("/", validateListing, async (req, res, next) => {
+    console.log("Request Body:",req.body);
     try {
         const newListing = new Listing(req.body.listing);
         await newListing.save();

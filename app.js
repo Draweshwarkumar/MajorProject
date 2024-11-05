@@ -9,7 +9,7 @@ const { reviewSchema } = require("./schema.js");
 const Listing = require('./models/listing.js'); // Use relative path
 const Review = require("./models/review.js");
 const listings = require("./routes/listing.js"); // Import listings routes
-const reviwes = require("./routes/review.js");
+const reviews = require("./routes/review.js");
 const session = require("express-session");
 const flash = require("connect-flash");
 
@@ -56,7 +56,7 @@ app.use((req, res, next) =>{
 
 // Use the listings routes
 app.use("/listings", listings);
-app.use("/listings/:id/reviews",reviwes);
+app.use("/listings/:id/reviews",reviews);
 
 // Redirect root route to listings
 app.get("/", (req, res) => {
