@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 GET - users
-router.get("/" , (req,res) =>{
-    res.send("GET for users ");
-})
+// router.get("/" , (req,res) =>{
+//     res.send("GET for users ");
+// })
 
 // SHOW - users
 router.get("/:id", (req,res) =>{
